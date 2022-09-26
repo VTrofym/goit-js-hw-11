@@ -48,14 +48,17 @@ async function mountData(searchValue) {
     loadMoreCards(searchValue);
     
     removeClass('visually-hidden');
-    
+
     if (data.hits.length === 0) {
       addClass('visually-hidden');
       Notiflix.Notify.failure(
         'Sorry, there are no images matching your search query. Please try again.'
       );
     }
-    Notiflix.Notify.info(`Hooray! We found ${data.totalHits} images., 500`);
+    if (data.hits.length > 0) {
+      Notiflix.Notify.info(`Hooray! We found ${data.totalHits} images`)
+    }
+
     const galleryMarkup = createGalleryMarkup(data.hits);
     updateGallery(galleryMarkup);
     lightbox.refresh();
@@ -108,3 +111,5 @@ function removeClass(className) {
 function updateGallery(galleryMarkup) {
   galleryEl.insertAdjacentHTML('beforeend', galleryMarkup);
 }
+
+
