@@ -1,9 +1,8 @@
 import axios from 'axios';
-import Notiflix from 'notiflix';
-
 export const itemPerPage = 40;
 
-const API_KEY = '30087713-0176780a5d439b6fbf7b0e04e';
+const API_KEY = '30103480-eddec892c7cbcca44528b414d';
+
 const searchParams = new URLSearchParams({
   key: API_KEY,
   image_type: 'photo',
@@ -23,6 +22,5 @@ export async function getPhoto(search, page) {
     const response = await axios.get(`${BASE_URL}&page=${page}&q=${search}`);
     return response.data;
   } catch (error) {
-    Notiflix.Notify.failure(error.message);
   }
 }
