@@ -16,8 +16,9 @@ let lightbox = new SimpleLightbox('.photo-card a', {
 });
 
 formEl.addEventListener('submit', onSubmit);
+moreBtn.addEventListener('click', loadMoreCards);
 
-async function loadMoreCards(searchValue) {
+async function loadMoreCards() {
   page += 1;
   const data = await getPhoto(searchValue, page);
   const galleryMarkup = createGalleryMarkup(data.hits);
@@ -31,21 +32,23 @@ async function loadMoreCards(searchValue) {
 function onSubmit(event) {
   event.preventDefault();
   clearMarkup(galleryEl);
-  searchValue = event.currentTarget[0].value;
+  searchValue = event.currentTarget.elements.searchQuery.value.trim()
   mountData(searchValue);
+  if (!searchValue) {
+      console.log('no arg!');
+      return;
+    }
 }
 
 async function mountData(searchValue) {
   try {
     const data = await getPhoto(searchValue, page);
     console.log('data', data);
-    const moreBtnClbk = () => {
-      loadMoreCards(searchValue);
-    }
-    removeClass('visually-hidden');
 
-    moreBtn.removeEventListener('click', moreBtnClbk);
-    moreBtn.addEventListener('click', moreBtnClbk);
+    loadMoreCards(searchValue);
+    
+    removeClass('visually-hidden');
+    
     if (data.hits.length === 0) {
       addClass('visually-hidden');
       Notiflix.Notify.failure(
